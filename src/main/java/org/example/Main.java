@@ -1,19 +1,42 @@
 package org.example;
 
-// Press Shift twice to open the Search Everywhere dialog and type `show whitespaces`,
-// then press Enter. You can now see whitespace characters in your code.
+import org.example.model.ReadFromFile;
+import org.example.model.USER;
+import org.example.service.USER_DB;
+
+import java.util.List;
+
 public class Main {
-    public static void main(String[] args) {
-        // Press Alt+Enter with your caret at the highlighted text to see how
-        // IntelliJ IDEA suggests fixing it.
-        System.out.printf("Hello and welcome!");
+    public static void main(String[] args) throws InterruptedException {
 
-        // Press Shift+F10 or click the green arrow button in the gutter to run the code.
-        for (int i = 1; i <= 5; i++) {
+        while (true) {
+            USER_DB userDAO = new USER_DB();
+            ReadFromFile readFromFile = new ReadFromFile();
+            USER newUser = new USER(readFromFile.readFile().get(0), readFromFile.readFile().get(1),
+                    readFromFile.readFile().get(2), readFromFile.readFile().get(3));
 
-            // Press Shift+F9 to start debugging your code. We have set one breakpoint
-            // for you, but you can always add more by pressing Ctrl+F8.
-            System.out.println("i = " + i);
+            if (readFromFile.readFile().get(4).equals("s")) {
+                newUser = userDAO.saveUser(newUser);
+                System.out.println("Saved user: " + newUser);
+            } else if (readFromFile.readFile().get(4).equals("u")) {
+                newUser.setSurname("Kanybekov");
+                newUser = userDAO.updateUser(newUser);
+                System.out.println("Updated user: " + newUser);
+            } else if (readFromFile.readFile().get(4).equals("f")) {
+                Long userId = newUser.getId();
+                USER retrievedUser = userDAO.getUser(userId);
+                System.out.println("Retrieved user: " + retrievedUser);
+            } else if (readFromFile.readFile().get(4).equals("d")) {
+                Long userId = newUser.getId();
+                userDAO.deleteUser(userId);
+                System.out.println("Deleted user with ID: " + userId);
+            } else {
+                List<USER> allUsers2 = userDAO.getAllUsers();
+                for (USER user : allUsers2) {
+                    System.out.println("All users: " + user.getSurname());
+                }
+            }
+            Thread.sleep(15000);
         }
     }
 }

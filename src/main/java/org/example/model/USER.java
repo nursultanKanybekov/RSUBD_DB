@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "RSUBD_Student")
-public class TestValueModel {
+public class USER {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -13,6 +13,16 @@ public class TestValueModel {
     private String surname;
     private String gpa;
     private String group;
+
+    public USER() {
+    }
+
+    public USER(String name, String surname, String gpa, String group) {
+        this.name = name;
+        this.surname = surname;
+        this.gpa = gpa;
+        this.group = group;
+    }
 
     public Long getId() {
         return id;
